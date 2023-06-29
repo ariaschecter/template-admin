@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,14 +31,15 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth', 'verified')->controller(DashboardController::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard.index');
+    Route::get('/dashboard', 'index')->name('dashboard');
 });
 
-Route::middleware('role:admin', 'auth')->prefix('admin')->group(function () {
+Route::middleware('role:admin', 'auth')->prefix('admin')->name('admin.')->group(function () {
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('/', 'admin')->name('dashboard.admin');
-        Route::get('/image', 'image');
+        Route::get('/', 'admin')->name('dashboard');
     });
+
+    Route::resource('user', UserController::class);
 });
 
 require __DIR__.'/auth.php';

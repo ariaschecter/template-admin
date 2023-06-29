@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function index() {
         $role = auth()->user()->role;
         if ($role === 'admin') {
-            return redirect()->route('dashboard.admin');
+            return redirect()->route('admin.dashboard');
         } else if ($role === 'user') {
             dd('See DashboardController, you are a user');
         }
@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
     public function admin() {
         $breadcrumbs = [
-            ['Utility', route('dashboard.index')],
+            ['Utility', route('admin.dashboard')],
             ['Acielana', route('logout')],
         ];
         $breadcrumb_active = 'Blank Page';

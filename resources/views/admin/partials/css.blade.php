@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- END: Google Font -->
     <!-- BEGIN: Theme CSS-->
-    <link rel="stylesheet" href="{{ asset('backend/css/animate.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('backend/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/countrySelect.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/dragula.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/dropzone.css') }}">
@@ -20,12 +20,12 @@
     <link rel="stylesheet" href="{{ asset('backend/css/nice-select.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/plyr.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/css/quill.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/quill.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('backend/css/rt-plugins.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/css/select2.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('backend/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/SimpleBar.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/swiper-bundle.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/css/zabuto_calendar.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/zabuto_calendar.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('backend/css/sidebar-menu.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/app.css') }}">
     <!-- END: Theme CSS-->

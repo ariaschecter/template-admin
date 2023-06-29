@@ -28,7 +28,6 @@
                         <div class="transition-all duration-150 container-fluid" id="page_layout">
                             <div id="content_layout">
                                 @yield('main')
-
                             </div>
                         </div>
                     </div>
@@ -42,7 +41,7 @@
         </div>
     </main>
     <!-- scripts -->
-    @include('admin.partials.js')
+    @include('admin.partials.javascript')
     @yield('js')
 </body>
 
