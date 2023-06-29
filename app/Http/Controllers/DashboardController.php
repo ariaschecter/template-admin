@@ -18,7 +18,13 @@ class DashboardController extends Controller
     }
 
     public function admin() {
-        return view('admin.dashboard.index');
+        $breadcrumbs = [
+            ['Utility', route('dashboard.index')],
+            ['Acielana', route('logout')],
+        ];
+        $breadcrumb_active = 'Blank Page';
+
+        return view('admin.dashboard.index', compact('breadcrumbs', 'breadcrumb_active'));
     }
 
     public function image() {
