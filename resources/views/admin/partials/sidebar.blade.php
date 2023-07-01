@@ -55,6 +55,9 @@
                   <li class="">
                     <a href="{{ route('admin.user.create') }}" class="{{ $route == 'admin.user.create' ? 'active' : '' }}">Add User</a>
                   </li>
+                  <li class="">
+                    <a href="{{ route('admin.user.archive') }}" class="{{ $route == 'admin.user.archive' ? 'active' : '' }}">Archive</a>
+                  </li>
                 </ul>
               </li>
             {{-- <li class="">

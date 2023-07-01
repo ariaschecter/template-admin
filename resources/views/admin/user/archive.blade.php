@@ -33,7 +33,7 @@
                                             </th>
 
                                             <th scope="col" class=" table-th ">
-                                                Email Verified
+                                                Deleted
                                             </th>
 
                                             <th scope="col" class=" table-th ">
@@ -62,20 +62,14 @@
                                                 <td class="table-td"><a
                                                         href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
                                                 <td class="table-td">{{ $user->role }}</td>
-                                                <td class="table-td">{{ \Carbon\Carbon::parse($user->email_verified_at)->diffForHumans() }}</td>
+                                                {{-- <td class="table-td">{{ $user->role }}</td> --}}
+                                                <td class="table-td">{{ \Carbon\Carbon::parse($user->deleted_at)->diffForHumans() }}</td>
                                                 <td class="table-td ">
                                                     <div class="flex space-x-3 rtl:space-x-reverse">
-                                                        <a href="{{ route('admin.user.show', $user->id) }}" target="_blank" class="action-btn">
-                                                            <iconify-icon icon="heroicons:eye"></iconify-icon>
-                                                        </a>
-                                                        <button class="action-btn" type="button">
-                                                            <iconify-icon icon="heroicons:arrow-path-solid"></iconify-icon>
-                                                        </button>
-                                                        <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST">
-                                                            @method('DELETE')
+                                                        <form action="{{ route('admin.user.restore', $user->id) }}" method="POST">
                                                             @csrf
                                                             <button class="action-btn" type="submit">
-                                                                <iconify-icon icon="heroicons:trash"></iconify-icon>
+                                                                <iconify-icon icon="heroicons:arrow-up-tray"></iconify-icon>
                                                             </button>
                                                         </form>
                                                     </div>

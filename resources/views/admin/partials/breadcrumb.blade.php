@@ -10,17 +10,21 @@
             </a>
         </li>
         @foreach ($breadcrumbs as $breadcrumb)
+            @if($breadcrumb[1] == true)
             <li class="inline-block relative text-sm text-primary-500 font-Inter ">
-                <a href="{{ $breadcrumb[1] }}">
+                <a href="{{ $breadcrumb[2] }}">
                     {{ $breadcrumb[0] }}
                     <iconify-icon icon="heroicons-outline:chevron-right"
                         class="relative top-[3px] text-slate-500 rtl:rotate-180">
                     </iconify-icon>
                 </a>
             </li>
+            @else
+            <li class="inline-block relative text-sm text-slate-500 font-Inter dark:text-white">
+                {{ $breadcrumb[0] }}
+            </li>
+            @endif
         @endforeach
-        <li class="inline-block relative text-sm text-slate-500 font-Inter dark:text-white">
-            {{ $breadcrumb_active }}</li>
     </ul>
 </div>
 <!-- END: BreadCrumb -->
