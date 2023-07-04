@@ -41,7 +41,7 @@ Route::middleware('role:admin', 'auth')->prefix('admin')->name('admin.')->group(
 
     Route::get('user/archive', [UserController::class, 'archive'])->name('user.archive');
     Route::post('user/restore/{id}', [UserController::class, 'restore'])->name('user.restore');
-    Route::resource('user', UserController::class)->withTrashed(['*']);
+    Route::resource('user', UserController::class)->except('edit')->withTrashed(['*']);
 });
 
 require __DIR__.'/auth.php';

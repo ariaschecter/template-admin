@@ -68,7 +68,7 @@
                                                     <div class="flex space-x-3 rtl:space-x-reverse">
                                                         <form action="{{ route('admin.user.restore', $user->id) }}" method="POST">
                                                             @csrf
-                                                            <button class="action-btn" type="submit">
+                                                            <button class="toolTip onTop justify-center action-btn" type="submit" data-tippy-content="Unarchive" data-tippy-theme="info">
                                                                 <iconify-icon icon="heroicons:arrow-up-tray"></iconify-icon>
                                                             </button>
                                                         </form>

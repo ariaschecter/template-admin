@@ -87,9 +87,19 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $role = $user->role;
+        if ($role == 'admin') {
+            $new_role = 'user';
+        } else {
+            $new_role = 'admin';
+        }
+
+        $user->update([
+            'role' => $new_role
+        ]);
+        return redirect()->back();
     }
 
     /**
