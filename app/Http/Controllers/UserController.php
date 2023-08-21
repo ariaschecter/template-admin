@@ -49,14 +49,10 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $profile = 'profile/' . Str::uuid() . '.png';
-        Storage::copy('temp/user.png', $profile);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'profile_photo' => $profile,
             'email_verified_at' => now()
         ]);
 
