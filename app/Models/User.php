@@ -9,17 +9,35 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Uuids, SoftDeletes;
+    use LogsActivity;
+
+    protected static $logUnguarded = true;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $name = $this->name ?? 'System';
+        $authUser = Auth::user()->name ?? 'System';
+        return $name . " {$eventName} Oleh: " . $authUser;
+    }
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $guarded = [''];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.

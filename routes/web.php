@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -36,6 +37,10 @@ Route::middleware('auth', 'verified')->controller(DashboardController::class)->g
 Route::middleware('role:admin', 'auth')->prefix('admin')->name('admin.')->group(function () {
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/', 'admin')->name('dashboard');
+    });
+
+    Route::controller(AdminController::class)->group(function () {
+        Route::get('log', 'log')->name('log.index');
     });
 
     Route::get('user/archive', [UserController::class, 'archive'])->name('user.archive');

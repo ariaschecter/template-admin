@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Str;
+use Laravolt\Avatar\Avatar;
 
 class UserController extends Controller
 {
@@ -55,6 +56,14 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'email_verified_at' => now()
         ]);
+
+        $image = 'profile/' . $user->id . '.png';
+
+        $avatar = new Avatar();
+
+        $avatar->create($user->name)->save('storage/' . $image);
+
+        $user->update(['profile_photo' => $image]);
 
         return redirect()->route('admin.user.index');
     }

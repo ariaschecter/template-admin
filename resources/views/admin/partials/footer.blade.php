@@ -9,8 +9,8 @@
             </div>
             <div class="ltr:md:text-right rtl:md:text-end text-center text-sm">
                 Hand-crafted &amp; Made by
-                <a href="https://codeshaper.net" target="_blank" class="text-primary-500 font-semibold">
-                    Codeshaper
+                <a href="https://acielana.my.id" target="_blank" class="text-primary-500 font-semibold">
+                    Acielana
                 </a>
             </div>
         </div>

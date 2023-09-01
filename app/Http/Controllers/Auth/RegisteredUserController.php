@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
+use Laravolt\Avatar\Avatar;
 
 class RegisteredUserController extends Controller
 {
@@ -45,6 +46,13 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+        $image = 'profile/' . $user->id . '.png';
+
+        $avatar = new Avatar();
+
+        $avatar->create($user->name)->save('storage/' . $image);
+
+        $user->update(['profile_photo' => $image]);
 
         Auth::login($user);
 
