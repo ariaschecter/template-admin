@@ -2,8 +2,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <title>{{ $title ?? 'Admin' }} | Stay Coding</title>
-    <link rel="icon" type="image/png" href="{{ asset('backend/images/logo/favicon.svg') }}">
+    @include('admin.partials.title')
     <!-- BEGIN: Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
