@@ -6,6 +6,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,35 +21,45 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Language Change
+Route::get('lang/{lang}', function ($lang) {
+    if (array_key_exists($lang, Config::get('languages'))) {
+        Session::put('applocale', $lang);
+    }
+    return redirect()->back();
+})->name('lang');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware('language')->group(function (){
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
-});
-
-Route::middleware('auth', 'verified')->controller(DashboardController::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard');
-});
-
-Route::middleware('role:admin', 'auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::controller(DashboardController::class)->group(function () {
-        Route::get('/', 'admin')->name('dashboard');
+    // Frontend routes
+    Route::get('/', function () {
+        return view('welcome');
     });
 
-    Route::controller(AdminController::class)->group(function () {
-        Route::get('log', 'log')->name('log.index');
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
     });
 
-    Route::get('user/archive', [UserController::class, 'archive'])->name('user.archive');
-    Route::post('user/restore/{id}', [UserController::class, 'restore'])->name('user.restore');
-    Route::resource('user', UserController::class)->except('edit')->withTrashed(['*']);
+    // Dashboard routes
+    Route::middleware('auth', 'verified')->controller(DashboardController::class)->group(function () {
+        Route::get('/dashboard', 'index')->name('dashboard');
+    });
+
+    // Admin routes
+    Route::middleware('role:admin', 'auth')->prefix('admin')->name('admin.')->group(function () {
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/', 'admin')->name('dashboard');
+        });
+
+        Route::controller(AdminController::class)->group(function () {
+            Route::get('log', 'log')->name('log.index');
+        });
+
+        Route::get('user/archive', [UserController::class, 'archive'])->name('user.archive');
+        Route::post('user/restore/{id}', [UserController::class, 'restore'])->name('user.restore');
+        Route::resource('user', UserController::class)->except('edit')->withTrashed(['*']);
+    });
 });
 
 require __DIR__.'/auth.php';
