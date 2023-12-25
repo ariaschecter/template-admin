@@ -35,27 +35,33 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            DB::beginTransaction();
 
-        event(new Registered($user));
-        $image = 'profile/' . $user->id . '.png';
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'password' => Hash::make($request->password),
+            ]);
 
-        $avatar = new Avatar();
+            event(new Registered($user));
+            $image = 'picture/' . $user->id . '.png';
 
-        $avatar->create($user->name)->save('storage/' . $image);
+            $avatar = new Avatar();
 
-        $user->update(['profile_photo' => $image]);
+            $avatar->create($user->name)->save('uploads/' . $image);
 
-        Auth::login($user);
-
+            $user->update(['profile_photo' => $image]);
+            DB::commit();
+            Auth::login($user);
+        } catch (Exception $e) {
+            DB::rollback();
+        }
         return redirect(RouteServiceProvider::HOME);
     }
 }
