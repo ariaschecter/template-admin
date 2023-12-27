@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules;
@@ -46,24 +48,31 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'email_verified_at' => now()
-        ]);
+        try {
+            DB::beginTransaction();
 
-        $image = 'profile/' . $user->id . '.png';
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'password' => Hash::make($request->password),
+                'email_verified_at' => now()
+            ]);
+            $image = 'picture/' . $user->id . '.png';
 
-        $avatar = new Avatar();
+            $avatar = new Avatar();
 
-        $avatar->create($user->name)->save('storage/' . $image);
+            $avatar->create($user->name)->save('uploads/' . $image);
 
-        $user->update(['profile_photo' => $image]);
+            $user->update(['profile_photo' => $image]);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+        }
 
         return redirect()->route('admin.user.index');
     }
@@ -116,7 +125,8 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function archive() {
+    public function archive()
+    {
         $breadcrumbs = [
             ['User', true, route('admin.user.index')],
             ['Archive', false],
@@ -126,7 +136,8 @@ class UserController extends Controller
         return view('admin.user.archive', compact('breadcrumbs', 'title', 'users'));
     }
 
-    public function restore($id) {
+    public function restore($id)
+    {
         User::withTrashed()->where('id', $id)->restore();
         return redirect()->back();
     }
