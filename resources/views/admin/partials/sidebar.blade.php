@@ -31,7 +31,8 @@
         <ul class="sidebar-menu">
             <li class="sidebar-menu-title">HOME</li>
             <li class="">
-                <a href="{{ route('admin.dashboard') }}" class="navItem {{ $route == 'admin.dashboard' ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}"
+                    class="navItem {{ $route == 'admin.dashboard' ? 'active' : '' }}">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="heroicons-outline:home"></iconify-icon>
                         <span>Home</span>
@@ -41,30 +42,11 @@
 
             <li class="sidebar-menu-title">User</li>
             <li class="">
-                <a href="javascript:void(0)" class="navItem">
+                <a href="{{ route('admin.user.index') }}"
+                    class="navItem {{ $route == 'admin.user.index' ? 'active' : '' }}">
                     <span class="flex items-center">
-                        <iconify-icon class="nav-icon" icon="heroicons-outline:user"></iconify-icon>
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:users"></iconify-icon>
                         <span>User</span>
-                    </span>
-                  <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
-                </a>
-                <ul class="sidebar-submenu">
-                  <li class="">
-                    <a href="{{ route('admin.user.index') }}" class="{{ $route == 'admin.user.index' ? 'active' : '' }}">All User</a>
-                  </li>
-                  <li class="">
-                    <a href="{{ route('admin.user.create') }}" class="{{ $route == 'admin.user.create' ? 'active' : '' }}">Add User</a>
-                  </li>
-                  <li class="">
-                    <a href="{{ route('admin.user.archive') }}" class="{{ $route == 'admin.user.archive' ? 'active' : '' }}">Archive</a>
-                  </li>
-                </ul>
-              </li>
-            <li class="">
-                <a href="{{ route('admin.log.index') }}" class="navItem {{ $route == 'admin.log.index' ? 'active' : '' }}">
-                    <span class="flex items-center">
-                        <iconify-icon class="nav-icon" icon="heroicons-outline:user"></iconify-icon>
-                        <span>Log</span>
                     </span>
                 </a>
             </li>

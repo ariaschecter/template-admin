@@ -58,7 +58,6 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->password),
                 'email_verified_at' => now()
             ]);
@@ -74,7 +73,7 @@ class UserController extends Controller
             DB::rollback();
         }
 
-        return redirect()->route('admin.user.index');
+        return redirect()->route('admin.user.create')->with(['color' => 'bg-success-500', 'message' => __('user.success.store')]);
     }
 
     /**
@@ -87,15 +86,22 @@ class UserController extends Controller
             [$user->name, false],
         ];
         $title = $user->name;
-        return view('admin.user.show', compact('breadcrumbs', 'title', 'user'));
+        $editable = false;
+        return view('admin.user.edit', compact('breadcrumbs', 'title', 'user', 'editable'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $breadcrumbs = [
+            ['User', true, route('admin.user.index')],
+            [$user->name, false],
+        ];
+        $title = $user->name;
+        $editable = true;
+        return view('admin.user.edit', compact('breadcrumbs', 'title', 'user', 'editable'));
     }
 
     /**
@@ -103,17 +109,29 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $role = $user->role;
-        if ($role == 'admin') {
-            $new_role = 'user';
-        } else {
-            $new_role = 'admin';
-        }
-
-        $user->update([
-            'role' => $new_role
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
         ]);
-        return redirect()->back();
+
+        try {
+            DB::beginTransaction();
+
+            if ($validated['password'] == null) {
+                unset($validated['password']);
+            } else {
+                $validated['password'] = Hash::make($validated['password']);
+            }
+
+            $user->update($validated);
+
+            DB::commit();
+
+            return redirect()->route('admin.user.index')->with(['color' => 'bg-success-500', 'message' => __('user.success.store')]);
+        } catch (Exception $e) {
+            DB::rollback();
+        }
     }
 
     /**
@@ -125,20 +143,20 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function archive()
-    {
-        $breadcrumbs = [
-            ['User', true, route('admin.user.index')],
-            ['Archive', false],
-        ];
-        $title = 'Archive User';
-        $users = User::onlyTrashed()->get();
-        return view('admin.user.archive', compact('breadcrumbs', 'title', 'users'));
-    }
+    // public function archive()
+    // {
+    //     $breadcrumbs = [
+    //         ['User', true, route('admin.user.index')],
+    //         ['Archive', false],
+    //     ];
+    //     $title = 'Archive User';
+    //     $users = User::onlyTrashed()->get();
+    //     return view('admin.user.archive', compact('breadcrumbs', 'title', 'users'));
+    // }
 
-    public function restore($id)
-    {
-        User::withTrashed()->where('id', $id)->restore();
-        return redirect()->back();
-    }
+    // public function restore($id)
+    // {
+    //     User::withTrashed()->where('id', $id)->restore();
+    //     return redirect()->back();
+    // }
 }

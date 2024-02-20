@@ -48,18 +48,18 @@
 
                 <div class="relative">
                     @foreach (Config::get('languages') as $lang => $language)
-                    @if ($lang == App::getLocale())
-                    <button
-                        class="text-slate-800 dark:text-white focus:ring-0 focus:outline-none font-medium rounded-lg text-sm text-center inline-flex items-center"
-                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <iconify-icon icon="{{ $language[1] }}" class="mr-0 md:mr-2 rtl:ml-2 text-xl">
-                        </iconify-icon>
-                        <span class="text-sm md:block hidden font-medium text-slate-600 dark:text-slate-300">
-                            {{ $language[0] }}
-                        </span>
-                    </button>
-                    @endif
-                            @endforeach
+                        @if ($lang == App::getLocale())
+                            <button
+                                class="text-slate-800 dark:text-white focus:ring-0 focus:outline-none font-medium rounded-lg text-sm text-center inline-flex items-center"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <iconify-icon icon="{{ $language[1] }}" class="mr-0 md:mr-2 rtl:ml-2 text-xl">
+                                </iconify-icon>
+                                <span class="text-sm md:block hidden font-medium text-slate-600 dark:text-slate-300">
+                                    {{ $language[0] }}
+                                </span>
+                            </button>
+                        @endif
+                    @endforeach
                     <!-- Language Dropdown menu -->
                     {{-- <button data-fc-type="dropdown" data-fc-placement="bottom-end" type="button" class="nav-link p-2 fc-dropdown">
                         <span class="flex items-center justify-center h-6 w-6">
@@ -81,16 +81,16 @@
                         class="dropdown-menu z-10 hidden bg-white divide-y divide-slate-100 shadow w-44 dark:bg-slate-800 border dark:border-slate-900 !top-[25px] rounded-md overflow-hidden">
                         <ul class="py-1 text-sm text-slate-800 dark:text-slate-200">
                             @foreach (Config::get('languages') as $lang => $language)
-                            @if ($lang != App::getLocale())
-                                <li>
-                                    <a href="{{ route('lang', $lang) }}"
-                                        class="flex items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white">
-                                        <iconify-icon icon="{{ $language[1] }}" class="ltr:mr-2 rtl:ml-2 text-xl">
-                                        </iconify-icon>
-                                        <span class="font-medium">{{ $language[0] }}</span>
-                                    </a>
-                                </li>
-                            @endif
+                                @if ($lang != App::getLocale())
+                                    <li>
+                                        <a href="{{ route('lang', $lang) }}"
+                                            class="flex items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white">
+                                            <iconify-icon icon="{{ $language[1] }}" class="ltr:mr-2 rtl:ml-2 text-xl">
+                                            </iconify-icon>
+                                            <span class="font-medium">{{ $language[0] }}</span>
+                                        </a>
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
                     </div>
@@ -129,17 +129,27 @@
                         class="text-slate-800 dark:text-white focus:ring-0 focus:outline-none font-medium rounded-lg text-sm text-center inline-flex items-center"
                         type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="lg:h-8 lg:w-8 h-7 w-7 rounded-full flex-1 ltr:mr-[10px] rtl:ml-[10px]">
-                            <img src="{{ Storage::url(auth()->user()->profile_photo) }}" alt="user"
+                            @php
+                                $user = auth()->user();
+                                $image = null;
+                                if (Storage::exists($user->profile_photo)) {
+                                    $image = Storage::url($user->profile_photo);
+                                } else {
+                                    $image = Avatar::create(auth()->user()->name)->toBase64();
+                                }
+                            @endphp
+                            <img src="{{ $image }}" alt="user"
                                 class="block w-full h-full object-cover rounded-full">
                         </div>
-                        <span class="flex-none text-slate-600 dark:text-white text-sm font-normal items-center lg:flex hidden overflow-hidden text-ellipsis whitespace-nowrap">
+                        <span
+                            class="flex-none text-slate-600 dark:text-white text-sm font-normal items-center lg:flex hidden overflow-hidden text-ellipsis whitespace-nowrap">
                             {{ auth()->user()->name }}
                         </span>
                         <svg class="w-[16px] h-[16px] dark:text-white hidden lg:inline-block text-base inline-block ml-[10px] rtl:mr-[10px]"
                             aria-hidden="true" fill="none" stroke="currentColor" viewbox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 9l-7 7-7-7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
                         </svg>
                     </button>
                     <!-- Dropdown menu -->
@@ -147,7 +157,7 @@
                         class="dropdown-menu z-10 hidden bg-white divide-y divide-slate-100 shadow w-44 dark:bg-slate-800 border dark:border-slate-700 !top-[23px] rounded-md overflow-hidden">
                         <ul class="py-1 text-sm text-slate-800 dark:text-slate-200">
                             <li>
-                                <a href="{{ route('profile.edit') }}"
+                                <a href="{{ route(auth()->user()->role . '.profile.edit') }}"
                                     class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600 dark:text-white font-normal">
                                     <iconify-icon icon="heroicons-outline:user"
                                         class="relative top-[2px] text-lg ltr:mr-1 rtl:ml-1">

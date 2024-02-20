@@ -24,7 +24,7 @@ class ProfileController extends Controller
         ];
         $title = 'Profile';
 
-        if(auth()->user()->role == 'admin') {
+        if (auth()->user()->role == 'admin') {
             return view('admin.profile.index', compact('user', 'breadcrumbs', 'title'));
         } else {
             dd('Not Implemented');
@@ -50,6 +50,6 @@ class ProfileController extends Controller
 
         $user->update($validated);
 
-        return Redirect::route('profile.edit');
+        return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('Profile berhasil dirubah')]);;
     }
 }

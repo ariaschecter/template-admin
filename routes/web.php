@@ -29,7 +29,7 @@ Route::get('lang/{lang}', function ($lang) {
     return redirect()->back();
 })->name('lang');
 
-Route::middleware('language')->group(function (){
+Route::middleware('language')->group(function () {
 
     // Frontend routes
     Route::get('/', function () {
@@ -37,8 +37,6 @@ Route::middleware('language')->group(function (){
     });
 
     Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
     });
 
     // Dashboard routes
@@ -52,14 +50,11 @@ Route::middleware('language')->group(function (){
             Route::get('/', 'admin')->name('dashboard');
         });
 
-        Route::controller(AdminController::class)->group(function () {
-            Route::get('log', 'log')->name('log.index');
-        });
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
-        Route::get('user/archive', [UserController::class, 'archive'])->name('user.archive');
-        Route::post('user/restore/{id}', [UserController::class, 'restore'])->name('user.restore');
-        Route::resource('user', UserController::class)->except('edit')->withTrashed(['*']);
+        Route::resource('user', UserController::class);
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
