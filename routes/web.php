@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -53,7 +54,57 @@ Route::middleware('language')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
+        Route::prefix('application')->name('application.')->group(function () {
+            Route::get('/', [ApplicationController::class, 'index'])->name('index');
+        });
+
         Route::resource('user', UserController::class);
+    });
+
+    // Konsumen routes
+    Route::middleware('role:konsumen', 'auth')->prefix('konsumen')->name('konsumen.')->group(function () {
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/', 'konsumen')->name('dashboard');
+        });
+
+        Route::prefix('application')->name('application.')->group(function () {
+            Route::get('/', [ApplicationController::class, 'konsumenIndex'])->name('index');
+            Route::get('/create', [ApplicationController::class, 'konsumenCreate'])->name('create');
+            Route::post('/create', [ApplicationController::class, 'konsumenStore'])->name('create');
+        });
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
+    });
+
+    // dealer routes
+    Route::middleware('role:dealer', 'auth')->prefix('dealer')->name('dealer.')->group(function () {
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/', 'dealer')->name('dashboard');
+        });
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
+    });
+
+    // marketing routes
+    Route::middleware('role:marketing', 'auth')->prefix('marketing')->name('marketing.')->group(function () {
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/', 'marketing')->name('dashboard');
+        });
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
+    });
+
+    // atasan routes
+    Route::middleware('role:atasan', 'auth')->prefix('atasan')->name('atasan.')->group(function () {
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/', 'atasan')->name('dashboard');
+        });
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
     });
 });
 

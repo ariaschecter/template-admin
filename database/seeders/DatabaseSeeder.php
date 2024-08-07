@@ -12,14 +12,16 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
+    public function run() : void
     {
-        // User::factory(10)->create();
+        $roles = ['konsumen', 'dealer', 'marketing', 'atasan', 'admin'];
 
-        User::factory()->create([
-            'name' => 'Acielana',
-            'email' => 'aria@gmail.com',
-            'role' => 'admin'
-        ]);
+        foreach ($roles as $role) {
+            User::factory()->create([
+                'name'  => $role,
+                'email' => $role . '@gmail.com',
+                'role'  => $role
+            ]);
+        }
     }
 }
