@@ -142,21 +142,4 @@ class UserController extends Controller
         $user->delete();
         return redirect()->back();
     }
-
-    // public function archive()
-    // {
-    //     $breadcrumbs = [
-    //         ['User', true, route('admin.user.index')],
-    //         ['Archive', false],
-    //     ];
-    //     $title = 'Archive User';
-    //     $users = User::onlyTrashed()->get();
-    //     return view('admin.user.archive', compact('breadcrumbs', 'title', 'users'));
-    // }
-
-    // public function restore($id)
-    // {
-    //     User::withTrashed()->where('id', $id)->restore();
-    //     return redirect()->back();
-    // }
 }

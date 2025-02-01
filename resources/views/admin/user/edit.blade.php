@@ -42,12 +42,12 @@
                     @endif
                     <div>
                         @php
-                            $roles = ['konsumen', 'dealer', 'marketing', 'atasan', 'admin'];
+                            $roles = ['admin'];
                         @endphp
                         <label for="role" class="form-label">Role <x-required /></label>
                         <select name="role" id="role" class="select2 form-control w-full mt-2 py-2"
                             {{ !$editable ? 'disabled' : '' }}>
-                            @foreach ($role as $rol)
+                            @foreach ($roles as $rol)
                                 <option value="{{ $rol }}" {{ $rol === $user->role ? 'selected' : '' }}
                                     class=" inline-block font-Inter font-normal text-sm text-slate-600">
                                     {{ $rol }}</option>
