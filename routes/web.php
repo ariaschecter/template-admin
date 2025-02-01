@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IKU1Controller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,7 @@ Route::middleware('language')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
+        Route::resource('iku-1', IKU1Controller::class);
         Route::resource('user', UserController::class);
     });
 });

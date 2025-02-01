@@ -41,8 +41,8 @@
         </div>
     </main>
     <!-- scripts -->
-    @stack('js')
     @include('admin.partials.javascript')
+    @stack('js')
 </body>
 
 </html>
