@@ -14,4 +14,8 @@ class IKU1 extends Model
     protected $table = 'iku_1';
 
     protected $guarded = ['id'];
+
+    public function select_list() {
+        return $this->belongsTo(SelectList::class, 'select_id');
+    }
 }

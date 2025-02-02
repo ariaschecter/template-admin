@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\IKU1;
+use App\Models\SelectList;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +19,13 @@ class IKU1Controller extends Controller
             ['IKU 1', true, route('admin.user.index')],
             ['Index', false],
         ];
-        $title = 'All IKU1';
-        $users = IKU1::latest()->get();
-        return view('admin.iku1.index', compact('breadcrumbs', 'title', 'users'));
+        $title = 'Data Indikator Kinerja Utama 1';
+        $subtitle = 'Lulusan berhasil mendapat pekerjaan yang layak, melanjutkan studi, atau menjadi wiraswasta.';
+        $items = IKU1::with('select_list')->latest()->get();
+
+        $selects = SelectList::where('type', 'iku-1')->get();
+
+        return view('admin.iku1.index', compact('breadcrumbs', 'title', 'subtitle', 'items', 'selects'));
     }
 
     /**
@@ -52,6 +57,7 @@ class IKU1Controller extends Controller
         IKU1::create([
             'name' => $request->name,
             'nim' => $request->nim,
+            'select_id' => $request->select_id,
             'description' => $request->description,
         ]);
 
@@ -66,50 +72,31 @@ class IKU1Controller extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(IKU1 $iku1)
-    {
-        $breadcrumbs = [
-            ['IKU 1', true, route('admin.user.index')],
-            [$iku1->name, false],
-        ];
-        $title = $iku1->name;
-        $editable = false;
-        return view('admin.user.edit', compact('breadcrumbs', 'title', 'user', 'editable'));
-    }
-
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  */
-    // public function edit(IKU1 $iku1)
-    // {
-    //     $breadcrumbs = [
-    //         ['IKU 1', true, route('admin.user.index')],
-    //         [$user->name, false],
-    //     ];
-    //     $title = $user->name;
-    //     $editable = true;
-    //     return view('admin.user.edit', compact('breadcrumbs', 'title', 'user', 'editable'));
-    // }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, IKU1 $iku1)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nim' => 'required|string|max:255',
+            'select_id' => 'required|exists:select_lists,id',
+            'description' => 'required|string',
+            'file' => 'nullable|file|image',
         ]);
 
         try {
             DB::beginTransaction();
 
-            $iku1->update($validated);
+            $iku1->update([
+                'name' => $request->name,
+                'nim' => $request->nim,
+                'select_id' => $request->select_id,
+                'description' => $request->description,
+            ]);
 
             DB::commit();
 
-            return redirect()->route('admin.user.index')->with(['color' => 'bg-success-500', 'message' => __('user.success.store')]);
+            return redirect()->route('admin.iku-1.index')->with(['color' => 'bg-success-500', 'message' => __('iku1.success.update')]);
         } catch (Exception $e) {
             DB::rollback();
         }
@@ -121,6 +108,6 @@ class IKU1Controller extends Controller
     public function destroy(IKU1 $iku1)
     {
         $iku1->delete();
-        return redirect()->back();
+        return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('iku1.success.destroy')]);
     }
 }

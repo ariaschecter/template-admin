@@ -39,6 +39,15 @@
                     </span>
                 </a>
             </li>
+            <li class="">
+                <a href="{{ route('admin.iku-1.index') }}"
+                    class="navItem {{ $route == 'admin.iku-1.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 1</span>
+                    </span>
+                </a>
+            </li>
 
             <li class="sidebar-menu-title">User</li>
             <li class="">

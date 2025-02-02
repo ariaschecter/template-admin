@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('iku_1', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->date('date')->nullable();
             $table->string('name')->nullable();
             $table->string('nim')->nullable();
             $table->foreignUuid('select_id')->nullable();
             $table->text('description')->nullable();
+            $table->string('file_name')->nullable();
             $table->string('file_path')->nullable();
 
             $table->timestamps();

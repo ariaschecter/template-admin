@@ -10,4 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SelectList extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
+
+    protected $guarded = ['id'];
 }

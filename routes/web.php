@@ -52,7 +52,14 @@ Route::middleware('language')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
-        Route::resource('iku-1', IKU1Controller::class);
+        Route::prefix('iku-1')->name('iku-1.')->group(function () {
+            Route::get('/', [IKU1Controller::class, 'index'])->name('index');
+            Route::get('/cetak', [IKU1Controller::class, 'print'])->name('print');
+            Route::post('/', [IKU1Controller::class, 'store'])->name('store');
+            Route::put('/{iku1}', [IKU1Controller::class, 'update'])->name('update');
+            Route::delete('/{iku1}', [IKU1Controller::class, 'destroy'])->name('destroy');
+        });
+
         Route::resource('user', UserController::class);
     });
 });

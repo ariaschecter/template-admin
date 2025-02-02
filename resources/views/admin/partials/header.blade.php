@@ -13,12 +13,13 @@
                         class="leading-none bg-transparent relative text-xl top-[2px] text-slate-900 dark:text-white"
                         icon="heroicons-outline:menu-alt-3"></iconify-icon>
                 </button>
-                <button
+                <h5>{{ $title ?? 'Dashboard'}}</h5>
+                {{-- <button
                     class="flex items-center xl:text-sm text-lg xl:text-slate-400 text-slate-800 dark:text-slate-300 px-1 rtl:space-x-reverse search-modal"
                     data-bs-toggle="modal" data-bs-target="#searchModal">
                     <iconify-icon icon="heroicons-outline:search"></iconify-icon>
                     <span class="xl:inline-block hidden ml-3">Search... </span>
-                </button>
+                </button> --}}
             </div>
             <!-- end vertcial -->
             <div class="items-center space-x-4 rtl:space-x-reverse horizental-box">

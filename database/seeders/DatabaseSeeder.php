@@ -23,5 +23,7 @@ class DatabaseSeeder extends Seeder
                 'role'  => $role
             ]);
         }
+
+        $this->call(SelectListSeeder::class);
     }
 }
