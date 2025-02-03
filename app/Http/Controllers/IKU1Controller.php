@@ -101,7 +101,7 @@ class IKU1Controller extends Controller
                 $file = $request->file;
 
                 // delete old file
-                if (Storage::exists($filePath)) {
+                if ($filePath != null && Storage::exists($filePath)) {
                     Storage::delete($filePath);
                 }
 
