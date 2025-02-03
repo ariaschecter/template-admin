@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\HelperPublic;
 use App\Models\IKU1;
 use App\Models\SelectList;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class IKU1Controller extends Controller
 {
@@ -51,20 +53,27 @@ class IKU1Controller extends Controller
             'nim' => 'required|string|max:255',
             'select_id' => 'required|exists:select_lists,id',
             'description' => 'required|string',
-            'file' => 'required|file|image',
+            'file' => 'required|file',
         ]);
+
+        $file = $request->file;
+        $fileName = str_replace(' ', '', $file->getClientOriginalName());
+        $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-1');
 
         IKU1::create([
             'name' => $request->name,
             'nim' => $request->nim,
             'select_id' => $request->select_id,
             'description' => $request->description,
+            'file_name' => $fileName,
+            'file_path' => $filePath,
         ]);
 
         try {
             DB::beginTransaction();
             DB::commit();
         } catch (Exception $e) {
+            dd($e);
             DB::rollback();
         }
 
@@ -86,12 +95,27 @@ class IKU1Controller extends Controller
 
         try {
             DB::beginTransaction();
+            $fileName = $iku1->file_name;
+            $filePath = $iku1->file_path;
+            if($request->file('file')) {
+                $file = $request->file;
+
+                // delete old file
+                if (Storage::exists($filePath)) {
+                    Storage::delete($filePath);
+                }
+
+                $fileName = str_replace(' ', '', $file->getClientOriginalName());
+                $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-1');
+            }
 
             $iku1->update([
                 'name' => $request->name,
                 'nim' => $request->nim,
                 'select_id' => $request->select_id,
                 'description' => $request->description,
+                'file_name' => $fileName,
+                'file_path' => $filePath,
             ]);
 
             DB::commit();

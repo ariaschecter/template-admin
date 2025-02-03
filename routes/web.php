@@ -41,7 +41,9 @@ Route::middleware('language')->group(function () {
     // Dashboard routes
     Route::middleware('auth', 'verified')->controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
+        Route::get('/show-file/{path}/{id}', 'show_file')->name('show_file');
     });
+
 
     // Admin routes
     Route::middleware('role:admin', 'auth')->prefix('admin')->name('admin.')->group(function () {

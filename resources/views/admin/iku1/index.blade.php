@@ -54,6 +54,12 @@
                                             <th scope="col" class=" table-th ">
                                                 Jenis Kegiatan
                                             </th>
+                                            <th scope="col" class=" table-th ">
+                                                Deskripsi
+                                            </th>
+                                            <th scope="col" class=" table-th ">
+                                                File
+                                            </th>
 
                                             <th scope="col" class=" table-th ">
                                                 Action
@@ -69,6 +75,10 @@
                                                 <td class="table-td">{{ $item->name }}</td>
                                                 <td class="table-td">{{ $item->nim }}</td>
                                                 <td class="table-td">{{ $item->select_list->name ?? '' }}</td>
+                                                <td class="table-td">{{ $item->description }}</td>
+                                                <td class="table-td">
+                                                    <a href="{{ route('show_file', ['path' => 'iku-1', 'id' => $item->id, 'preview' => true]) }}" class="text-primary hover:underline" target="_blank">{{ $item->file_name }}</a>
+                                                </td>
                                                 <td class="table-td ">
                                                     <div class="flex space-x-3 rtl:space-x-reverse">
                                                         <button class="toolTip onTop justify-center action-btn"
@@ -128,8 +138,7 @@
                             </div>
                             <!-- Modal body -->
                             <div>
-                                <form id="form-el" action="{{ route('admin.iku-1.store') }}" method="POST"
-                                    enctype="multipart/form-data">
+                                <form id="form-el" action="{{ route('admin.iku-1.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="p-6 space-y-6">
                                             <!-- Name -->
