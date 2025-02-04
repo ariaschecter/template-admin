@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('iku_1', function (Blueprint $table) {
+        Schema::create('iku_6', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->nullable();
-            $table->string('nim')->nullable();
+            $table->string('institution_type')->nullable();
             $table->foreignUuid('select_id')->nullable();
-            $table->text('description')->nullable();
+            $table->text('nomor')->nullable();
+            $table->string('time')->nullable();
             $table->string('file_name')->nullable();
             $table->string('file_path')->nullable();
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('iku_1');
+        Schema::dropIfExists('iku_6');
     }
 };

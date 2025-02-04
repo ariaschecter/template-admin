@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\HelperPublic;
-use App\Models\IKU1;
+use App\Models\IKU4;
 use App\Models\SelectList;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class IKU1Controller extends Controller
+class IKU4Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,16 +18,29 @@ class IKU1Controller extends Controller
     public function index()
     {
         $breadcrumbs = [
-            ['IKU 1', true, route('admin.iku-1.index')],
+            ['IKU 4', true, route('admin.iku-4.index')],
             ['Index', false],
         ];
-        $title = 'Data Indikator Kinerja Utama 1';
-        $subtitle = 'Lulusan berhasil mendapat pekerjaan yang layak, melanjutkan studi, atau menjadi wiraswasta.';
-        $items = IKU1::with('select_list')->latest()->get();
+        $title = 'Data Indikator Kinerja Utama 4';
+        $subtitle = 'Dosen yang berkualifikasi S3, memiliki sertifikat kompetensi atau profesi, atau berpengalaman kerja sebagai praktisi.';
+        $items = IKU4::with('select_list')->latest()->get();
 
-        $selects = SelectList::where('type', 'iku-1')->get();
+        $selects = SelectList::where('type', 'iku-4')->get();
 
-        return view('admin.iku1.index', compact('breadcrumbs', 'title', 'subtitle', 'items', 'selects'));
+        return view('admin.iku4.index', compact('breadcrumbs', 'title', 'subtitle', 'items', 'selects'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $breadcrumbs = [
+            ['IKU 4', true, route('admin.user.index')],
+            ['Create', false],
+        ];
+        $title = 'Create User';
+        return view('admin.user.create', compact('breadcrumbs', 'title'));
     }
 
     /**
@@ -37,7 +50,7 @@ class IKU1Controller extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'nim' => 'required|string|max:255',
+            'nip' => 'required|string|max:255',
             'select_id' => 'required|exists:select_lists,id',
             'description' => 'required|string',
             'file' => 'required|file',
@@ -45,11 +58,11 @@ class IKU1Controller extends Controller
 
         $file = $request->file;
         $fileName = str_replace(' ', '', $file->getClientOriginalName());
-        $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-1');
+        $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-4');
 
-        IKU1::create([
+        IKU4::create([
             'name' => $request->name,
-            'nim' => $request->nim,
+            'nip' => $request->nip,
             'select_id' => $request->select_id,
             'description' => $request->description,
             'file_name' => $fileName,
@@ -64,17 +77,17 @@ class IKU1Controller extends Controller
             DB::rollback();
         }
 
-        return redirect()->route('admin.iku-1.index')->with(['color' => 'bg-success-500', 'message' => __('Berhasil menambahkan data')]);
+        return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('Berhasil menambahkan data')]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, IKU1 $iku1)
+    public function update(Request $request, IKU4 $iku4)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'nim' => 'required|string|max:255',
+            'nip' => 'required|string|max:255',
             'select_id' => 'required|exists:select_lists,id',
             'description' => 'required|string',
             'file' => 'nullable|file|image',
@@ -82,8 +95,8 @@ class IKU1Controller extends Controller
 
         try {
             DB::beginTransaction();
-            $fileName = $iku1->file_name;
-            $filePath = $iku1->file_path;
+            $fileName = $iku4->file_name;
+            $filePath = $iku4->file_path;
             if($request->file('file')) {
                 $file = $request->file;
 
@@ -93,12 +106,12 @@ class IKU1Controller extends Controller
                 }
 
                 $fileName = str_replace(' ', '', $file->getClientOriginalName());
-                $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-1');
+                $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-4');
             }
 
-            $iku1->update([
+            $iku4->update([
                 'name' => $request->name,
-                'nim' => $request->nim,
+                'nip' => $request->nip,
                 'select_id' => $request->select_id,
                 'description' => $request->description,
                 'file_name' => $fileName,
@@ -107,7 +120,7 @@ class IKU1Controller extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.iku-1.index')->with(['color' => 'bg-success-500', 'message' => __('Berhasil mengubah data')]);
+            return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('Berhasil mengubah data')]);
         } catch (Exception $e) {
             DB::rollback();
         }
@@ -116,26 +129,26 @@ class IKU1Controller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(IKU1 $iku1)
+    public function destroy(IKU4 $iku4)
     {
-        $iku1->delete();
+        $iku4->delete();
         return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('Berhasil menghapus data')]);
     }
 
     public function print()
     {
         $headers = [
-            'No', 'Nama', 'NIM', 'Jenis Kegiatan', 'Deskripsi', 'File'
+            'No', 'Nama', 'NIP', 'Jenis Kegiatan', 'Deskripsi', 'File'
         ];
 
-        $dataIKU = IKU1::query()->with('select_list')->get()->map(function ($item, $key) {
+        $dataIKU = IKU4::query()->with('select_list')->get()->map(function ($item, $key) {
             return [
                 $item->key + 1,
                 $item->name,
-                $item->nim,
+                $item->nip,
                 $item->select_list->name,
                 $item->description,
-                route('show_file', ['path' => 'iku-1', 'id' => $item->id, 'preview' => true]),
+                route('show_file', ['path' => 'iku-4', 'id' => $item->id, 'preview' => true]),
             ];
         });
 

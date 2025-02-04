@@ -47,6 +47,55 @@
                         <span>IKU 1</span>
                     </span>
                 </a>
+                <a href="{{ route('admin.iku-2.index') }}"
+                    class="navItem {{ $route == 'admin.iku-2.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 2</span>
+                    </span>
+                </a>
+                <a href="{{ route('admin.iku-3.index') }}"
+                    class="navItem {{ $route == 'admin.iku-3.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 3</span>
+                    </span>
+                </a>
+                <a href="{{ route('admin.iku-4.index') }}"
+                    class="navItem {{ $route == 'admin.iku-4.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 4</span>
+                    </span>
+                </a>
+                <a href="{{ route('admin.iku-5.index') }}"
+                    class="navItem {{ $route == 'admin.iku-5.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 5</span>
+                    </span>
+                </a>
+                <a href="{{ route('admin.iku-6.index') }}"
+                    class="navItem {{ $route == 'admin.iku-6.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 6</span>
+                    </span>
+                </a>
+                <a href="{{ route('admin.iku-7.index') }}"
+                    class="navItem {{ $route == 'admin.iku-7.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 7</span>
+                    </span>
+                </a>
+                <a href="{{ route('admin.iku-8.index') }}"
+                    class="navItem {{ $route == 'admin.iku-8.index' ? 'active' : '' }}">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons-outline:bookmark"></iconify-icon>
+                        <span>IKU 8</span>
+                    </span>
+                </a>
             </li>
 
             <li class="sidebar-menu-title">User</li>
