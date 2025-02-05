@@ -31,19 +31,6 @@ class IKU4Controller extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $breadcrumbs = [
-            ['IKU 4', true, route('admin.user.index')],
-            ['Create', false],
-        ];
-        $title = 'Create User';
-        return view('admin.user.create', compact('breadcrumbs', 'title'));
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -73,7 +60,6 @@ class IKU4Controller extends Controller
             DB::beginTransaction();
             DB::commit();
         } catch (Exception $e) {
-            dd($e);
             DB::rollback();
         }
 

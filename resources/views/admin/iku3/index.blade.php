@@ -14,7 +14,7 @@
                     </div>
 
                     <div>
-                        <a href="{{ route('admin.iku-4.print') }}" target="_blank">
+                        <a href="{{ route('admin.iku-3.print') }}" target="_blank">
                             <button class="btn inline-flex justify-center btn-secondary">
                                 <span class="flex items-center">
                                     <iconify-icon class="text-xl ltr:mr-2 rtl:ml-2"
@@ -60,6 +60,12 @@
                                                 Deskripsi
                                             </th>
                                             <th scope="col" class=" table-th ">
+                                                Tempat
+                                            </th>
+                                            <th scope="col" class=" table-th ">
+                                                Waktu
+                                            </th>
+                                            <th scope="col" class=" table-th ">
                                                 File
                                             </th>
 
@@ -78,8 +84,10 @@
                                                 <td class="table-td">{{ $item->nip }}</td>
                                                 <td class="table-td">{{ $item->select_list->name ?? '' }}</td>
                                                 <td class="table-td">{{ $item->description }}</td>
+                                                <td class="table-td">{{ $item->location }}</td>
+                                                <td class="table-td">{{ $item->time }}</td>
                                                 <td class="table-td">
-                                                    <a href="{{ route('show_file', ['path' => 'iku-4', 'id' => $item->id, 'preview' => true]) }}"
+                                                    <a href="{{ route('show_file', ['path' => 'iku-3', 'id' => $item->id, 'preview' => true]) }}"
                                                         class="text-primary hover:underline"
                                                         target="_blank">{{ $item->file_name }}</a>
                                                 </td>
@@ -91,7 +99,7 @@
                                                             <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                                         </button>
                                                         <form id="delete-form-{{ $item->id }}"
-                                                            action="{{ route('admin.iku-4.destroy', $item->id) }}"
+                                                            action="{{ route('admin.iku-3.destroy', $item->id) }}"
                                                             method="POST">
                                                             @method('DELETE')
                                                             @csrf
@@ -137,7 +145,7 @@
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
                                             d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10
-                                                                                                                                                                                                                11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                                                                                                                                                                            11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                                             clip-rule="evenodd"></path>
                                     </svg>
                                     <span class="sr-only">Close modal</span>
@@ -145,7 +153,7 @@
                             </div>
                             <!-- Modal body -->
                             <div>
-                                <form id="form-el" action="{{ route('admin.iku-4.store') }}" method="POST"
+                                <form id="form-el" action="{{ route('admin.iku-3.store') }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="p-6 space-y-6">
@@ -155,7 +163,7 @@
                                                 class="text-sm font-Inter font-normal text-slate-900 block">Nama</label>
                                             <input type="text" id="name" name="name"
                                                 class="text-sm font-Inter font-normal text-slate-600 block w-full py-3 px-4 border border-slate-400 rounded-md focus:outline-none focus:ring-0 mt-1"
-                                                placeholder="Masukkan nama" required>
+                                                placeholder="Masukkan name" required>
                                         </div>
 
                                         <!-- NIP -->
@@ -182,13 +190,31 @@
                                             </select>
                                         </div>
 
+                                        <!-- Tempat -->
+                                        <div class="input-group">
+                                            <label for="location"
+                                                class="text-sm font-Inter font-normal text-slate-900 block">Tempat</label>
+                                            <input type="text" id="location" name="location"
+                                                class="text-sm font-Inter font-normal text-slate-600 block w-full py-3 px-4 border border-slate-400 rounded-md focus:outline-none focus:ring-0 mt-1"
+                                                placeholder="Masukkan tempat" required>
+                                        </div>
+
+                                        <!-- Time -->
+                                        <div class="input-group">
+                                            <label for="time"
+                                                class="text-sm font-Inter font-normal text-slate-900 block">Waktu</label>
+                                            <input type="text" id="time" name="time"
+                                                class="text-sm font-Inter font-normal text-slate-600 block w-full py-3 px-4 border border-slate-400 rounded-md focus:outline-none focus:ring-0 mt-1"
+                                                placeholder="Masukkan waktu" required>
+                                        </div>
+
                                         <!-- Description -->
                                         <div class="input-group">
                                             <label for="description"
-                                                class="text-sm font-Inter font-normal text-slate-900 block">Description</label>
+                                                class="text-sm font-Inter font-normal text-slate-900 block">Deskripsi</label>
                                             <textarea id="description" name="description"
                                                 class="text-sm font-Inter font-normal text-slate-600 block w-full py-3 px-4 border border-slate-400 rounded-md focus:outline-none focus:ring-0 mt-1"
-                                                rows="4" placeholder="Enter deskripsi" required></textarea>
+                                                rows="4" placeholder="Masukkan Deskripsi" required></textarea>
                                         </div>
 
                                         <!-- File -->
@@ -273,22 +299,24 @@
 
         function openModal() {
             reset_form();
-            $('#form-title').html('Tambah IKU 4');
+            $('#form-title').html('Tambah IKU 3');
             $('#form_modal').modal('show');
         }
 
         function edit(data) {
             reset_form();
-            $('#form-title').html('Edit IKU 4');
+            $('#form-title').html('Edit IKU 3');
             $("#file").prop("required", false); // Hapus required
             var currentAction = $("#form-el").attr("action");
             $("#form-el").attr("action", `${currentAction}/${data?.id}?_method=PUT`);
 
             // set edit data
             $('#name').val(data?.name);
-            $('#nip').val(data?.nip);
+            $('#nim').val(data?.nim);
             $('#select_id').val(data?.select_id);
             $('#description').val(data?.description);
+            $('#location').val(data?.location);
+            $('#time').val(data?.time);
 
             checkForm();
 
@@ -296,7 +324,7 @@
         }
 
         function reset_form() {
-            $("#form-el").attr("action", "{{ route('admin.iku-4.store') }}");
+            $("#form-el").attr("action", "{{ route('admin.iku-3.store') }}");
 
             let form = $("#form-el");
             form[0].reset();
