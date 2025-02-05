@@ -35,36 +35,39 @@ class IKU1Controller extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'nim' => 'required|string|max:255',
-            'select_id' => 'required|exists:select_lists,id',
-            'description' => 'required|string',
-            'file' => 'required|file',
-        ]);
-
-        $file = $request->file;
-        $fileName = str_replace(' ', '', $file->getClientOriginalName());
-        $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-1');
-
-        IKU1::create([
-            'name' => $request->name,
-            'nim' => $request->nim,
-            'select_id' => $request->select_id,
-            'description' => $request->description,
-            'file_name' => $fileName,
-            'file_path' => $filePath,
-        ]);
-
         try {
             DB::beginTransaction();
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'nim' => 'required|string|max:255',
+                'select_id' => 'required|exists:select_lists,id',
+                'description' => 'required|string',
+                'file' => 'required|file',
+            ]);
+
+            $file = $request->file;
+            $fileName = str_replace(' ', '', $file->getClientOriginalName());
+            $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-1');
+
+            IKU1::create([
+                'name' => $request->name,
+                'nim' => $request->nim,
+                'select_id' => $request->select_id,
+                'description' => $request->description,
+                'file_name' => $fileName,
+                'file_path' => $filePath,
+            ]);
+
             DB::commit();
+
+            return redirect()->route('admin.iku-1.index')->with(['color' => 'bg-success-500', 'message' => __('Berhasil menambahkan data')]);
         } catch (Exception $e) {
-            dd($e);
+            $message = $e->getMessage();
+            DB::rollback();
+            return redirect()->back()->with(['color' => 'bg-danger-500', 'message' => __($message)]);
             DB::rollback();
         }
 
-        return redirect()->route('admin.iku-1.index')->with(['color' => 'bg-success-500', 'message' => __('Berhasil menambahkan data')]);
     }
 
     /**
@@ -77,7 +80,7 @@ class IKU1Controller extends Controller
             'nim' => 'required|string|max:255',
             'select_id' => 'required|exists:select_lists,id',
             'description' => 'required|string',
-            'file' => 'nullable|file|image',
+            'file' => 'nullable|file',
         ]);
 
         try {
@@ -109,7 +112,9 @@ class IKU1Controller extends Controller
 
             return redirect()->route('admin.iku-1.index')->with(['color' => 'bg-success-500', 'message' => __('Berhasil mengubah data')]);
         } catch (Exception $e) {
+            $message = $e->getMessage();
             DB::rollback();
+            return redirect()->back()->with(['color' => 'bg-danger-500', 'message' => __($message)]);
         }
     }
 
@@ -130,7 +135,7 @@ class IKU1Controller extends Controller
 
         $dataIKU = IKU1::query()->with('select_list')->get()->map(function ($item, $key) {
             return [
-                $item->key + 1,
+                $key + 1,
                 $item->name,
                 $item->nim,
                 $item->select_list->name,

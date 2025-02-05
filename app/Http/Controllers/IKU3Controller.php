@@ -35,39 +35,42 @@ class IKU3Controller extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'nip' => 'required|string|max:255',
-            'select_id' => 'required|exists:select_lists,id',
-            'description' => 'required|string',
-            'location' => 'required|string|max:255',
-            'time' => 'required|string|max:255',
-            'file' => 'required|file',
-        ]);
-
-        $file = $request->file;
-        $fileName = str_replace(' ', '', $file->getClientOriginalName());
-        $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-3');
-
-        IKU3::create([
-            'name' => $request->name,
-            'nip' => $request->nip,
-            'select_id' => $request->select_id,
-            'description' => $request->description,
-            'location' => $request->location,
-            'time' => $request->time,
-            'file_name' => $fileName,
-            'file_path' => $filePath,
-        ]);
-
         try {
             DB::beginTransaction();
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'nip' => 'required|string|max:255',
+                'select_id' => 'required|exists:select_lists,id',
+                'description' => 'required|string',
+                'location' => 'required|string|max:255',
+                'time' => 'required|string|max:255',
+                'file' => 'required|file',
+            ]);
+
+            $file = $request->file;
+            $fileName = str_replace(' ', '', $file->getClientOriginalName());
+            $filePath = HelperPublic::helpStoreFileToStorage($file, 'iku-3');
+
+            IKU3::create([
+                'name' => $request->name,
+                'nip' => $request->nip,
+                'select_id' => $request->select_id,
+                'description' => $request->description,
+                'location' => $request->location,
+                'time' => $request->time,
+                'file_name' => $fileName,
+                'file_path' => $filePath,
+            ]);
+
             DB::commit();
+
+            return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('Berhasil menambahkan data')]);
         } catch (Exception $e) {
+            $message = $e->getMessage();
             DB::rollback();
+            return redirect()->back()->with(['color' => 'bg-danger-500', 'message' => __($message)]);
         }
 
-        return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('Berhasil menambahkan data')]);
     }
 
     /**
@@ -82,14 +85,14 @@ class IKU3Controller extends Controller
             'description' => 'required|string',
             'location' => 'required|string|max:255',
             'time' => 'required|string|max:255',
-            'file' => 'nullable|file|image',
+            'file' => 'nullable|file',
         ]);
 
         try {
             DB::beginTransaction();
             $fileName = $iku3->file_name;
             $filePath = $iku3->file_path;
-            if($request->file('file')) {
+            if ($request->file('file')) {
                 $file = $request->file;
 
                 // delete old file
@@ -116,7 +119,9 @@ class IKU3Controller extends Controller
 
             return redirect()->back()->with(['color' => 'bg-success-500', 'message' => __('Berhasil mengubah data')]);
         } catch (Exception $e) {
+            $message = $e->getMessage();
             DB::rollback();
+            return redirect()->back()->with(['color' => 'bg-danger-500', 'message' => __($message)]);
         }
     }
 
@@ -132,12 +137,19 @@ class IKU3Controller extends Controller
     public function print()
     {
         $headers = [
-            'No', 'Nama', 'NIP', 'Jenis Kegiatan', 'Tempat', 'Waktu', 'Deskripsi', 'File'
+            'No',
+            'Nama',
+            'NIP',
+            'Jenis Kegiatan',
+            'Tempat',
+            'Waktu',
+            'Deskripsi',
+            'File'
         ];
 
         $dataIKU = IKU3::query()->with('select_list')->get()->map(function ($item, $key) {
             return [
-                $item->key + 1,
+                $key + 1,
                 $item->name,
                 $item->nip,
                 $item->select_list->name,
@@ -152,6 +164,7 @@ class IKU3Controller extends Controller
             'Data Indikator Kinerja Utama 3',
             'Dosen yang berkegiatan tridharma di perguruan tinggi lain, berkegiatan tridharma di QS100 berdasarkan bidang ilmu (QS100 by subject), bekerja sebagai praktisi di dunia industri, atau membina mahasiswa yang berhasil meraih prestasi paling rendah tingkat nasional dalam 5 (lima) tahun terakhir.',
             $headers,
-            $dataIKU);
+            $dataIKU
+        );
     }
 }
